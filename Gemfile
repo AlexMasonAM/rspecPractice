@@ -42,6 +42,7 @@ group :development, :test do
 end
 
 gem 'mongoid', '~> 4.0.0'
+gem 'bootstrap-sass', '~> 3.3.1'
 
 group :development, :test do
   gem 'rspec-rails'
