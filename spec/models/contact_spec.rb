@@ -29,69 +29,51 @@ RSpec.describe "Basic Tests" do
 end
 
 RSpec.describe Contact do
-  # cleans out the mongoDB created for testing
+
+before(:each) do
+    @contact = Contact.new(
+      firstname: "Alex",
+      lastname: "Mason",
+      email: "alex@mason.am"
+    )
+  end
 
   after(:each) do 
     Contact.delete_all
   end
 
   it "should validate presence of firstname" do
-    @contact = Contact.new(
-      firstname: nil,
-      lastname: "Mason",
-      email: "alex@mason.am"
-      )
+    @contact.firstname = nil
     expect(@contact.valid?).to eq(false)
   end
 
   it "should validate presence of lastname" do
-    @contact = Contact.new(
-      firstname: "alex",
-      lastname: nil,
-      email: "alex@mason.am"
-      )
+    @contact.lastname = nil
     expect(@contact.valid?).to eq(false)
   end
 
   it "should validate presence of email" do
-    @contact = Contact.new(
-      firstname: "Alex",
-      lastname: "Mason",
-      email: nil
-      )
+    @contact.email = nil
     expect(@contact.valid?).to eq(false)
   end
 
   it "should validate uniqueness of email" do
-    # create combines two methods, new and save
-    @contact = Contact.create( 
-      firstname: "Alex",
-      lastname: "Mason",
-      email: "alex@mason.am"
-    )
-  
     @contact2 = Contact.new(
       firstname: "Me",
       lastname: "Oryou",
       email: "alex@mason.am"
       )
-    expect(@contact.valid?).to eq(true) 
-    expect(@contact2.valid?).to eq(false) 
+    expect(@contact.save).to eq(true) 
+    expect(@contact2.save).to eq(false) 
   end
 
   it "returns a contact's full name as a string" do
-    @contact = Contact.new( 
-      firstname: "Alex",
-      lastname: "Mason",
-      email: "alex@mason.am"
-    )
-    expect(@contact.fullname).to eq("Alex Mason")
-
     @contact2 = Contact.new(
       firstname: "Me",
       lastname: "Orewe",
       email: "me@orewe.mo"
     )
+    expect(@contact.fullname).to eq("Alex Mason")
     expect(@contact2.fullname).to eq("Me Orewe")
   end
 
